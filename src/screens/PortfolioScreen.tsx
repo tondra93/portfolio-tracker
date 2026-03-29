@@ -13,8 +13,6 @@ import { SummaryCard } from '../components/SummaryCard';
 import { HoldingRow } from '../components/HoldingRow';
 import { AddHoldingForm } from '../components/AddHoldingForm';
 
-// TODO: import Holding type
-
 export const PortfolioScreen: React.FC = () => {
   const { holdings, isLoading, error, addHolding } = usePortfolio();
   const [showForm, setShowForm] = useState(false);

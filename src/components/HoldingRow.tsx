@@ -1,9 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-// TODO: import Holding type
 
 interface Props {
-  // TODO: replace `any` with your Holding type
   holding: any;
 }
 
