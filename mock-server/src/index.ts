@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
 
 const app = express();
 app.use(cors());
@@ -14,7 +16,7 @@ interface Holding {
   currentPrice: number;
 }
 
-const holdings: Holding[] = [
+const defaultHoldings: Holding[] = [
   {
     id: '1',
     ticker: 'AAPL',
@@ -49,6 +51,37 @@ const holdings: Holding[] = [
   },
 ];
 
+const dataDirPath = path.resolve(__dirname, '../data');
+const holdingsFilePath = path.resolve(dataDirPath, 'holdings.json');
+
+const ensureDataFile = (): void => {
+  if (!fs.existsSync(dataDirPath)) {
+    fs.mkdirSync(dataDirPath, { recursive: true });
+  }
+
+  if (!fs.existsSync(holdingsFilePath)) {
+    fs.writeFileSync(holdingsFilePath, JSON.stringify(defaultHoldings, null, 2), 'utf-8');
+  }
+};
+
+const loadHoldings = (): Holding[] => {
+  try {
+    ensureDataFile();
+    const raw = fs.readFileSync(holdingsFilePath, 'utf-8');
+    const parsed = JSON.parse(raw) as Holding[];
+    return Array.isArray(parsed) ? parsed : [...defaultHoldings];
+  } catch {
+    return [...defaultHoldings];
+  }
+};
+
+const saveHoldings = (holdings: Holding[]): void => {
+  ensureDataFile();
+  fs.writeFileSync(holdingsFilePath, JSON.stringify(holdings, null, 2), 'utf-8');
+};
+
+let holdings: Holding[] = loadHoldings();
+
 // Simulate network latency
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -62,26 +95,38 @@ app.post('/api/portfolio', async (req: Request, res: Response) => {
   const body = req.body as Omit<Holding, 'id' | 'currentPrice'>;
 
   // Basic server-side validation (candidate's Zod schema should match this)
-  if (!body.ticker || !body.quantity || !body.purchasePrice) {
+  const ticker = body.ticker?.trim().toUpperCase();
+  const quantity = Number(body.quantity);
+  const purchasePrice = Number(body.purchasePrice);
+
+  if (!ticker || !Number.isInteger(quantity) || quantity <= 0 || purchasePrice <= 0) {
     res.status(400).json({ error: 'Missing required fields' });
     return;
   }
 
   const newHolding: Holding = {
     id: String(Date.now()),
-    ticker: body.ticker.toUpperCase(),
-    name: body.name ?? body.ticker,
-    quantity: Number(body.quantity),
-    purchasePrice: Number(body.purchasePrice),
+    ticker,
+    name: body.name?.trim() || ticker,
+    quantity,
+    purchasePrice,
     // Simulate a "market price" close to purchase price
-    currentPrice: Number(body.purchasePrice) * (0.9 + Math.random() * 0.25),
+    currentPrice: purchasePrice * (0.9 + Math.random() * 0.25),
   };
 
   holdings.push(newHolding);
+  saveHoldings(holdings);
   res.status(201).json(newHolding);
 });
 
 const PORT = 3001;
-app.listen(PORT, () => {
+const HOST = '0.0.0.0'; // Listen on all network interfaces
+
+// Start server on all network interfaces
+const server = app.listen(PORT, HOST, () => {
   console.log(`Mock API running at http://localhost:${PORT}`);
+  console.log(`Also accessible via your local network IP on port ${PORT}`);
+  console.log(`For Android emulator, use: http://10.0.2.2:${PORT}`);
 });
+
+export { server };

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "ticker": "AAPL",
+    "name": "Apple Inc.",
+    "quantity": 10,
+    "purchasePrice": 145,
+    "currentPrice": 178.5
+  },
+  {
+    "id": "2",
+    "ticker": "TSLA",
+    "name": "Tesla Inc.",
+    "quantity": 5,
+    "purchasePrice": 250,
+    "currentPrice": 198.3
+  },
+  {
+    "id": "3",
+    "ticker": "MSFT",
+    "name": "Microsoft Corp.",
+    "quantity": 8,
+    "purchasePrice": 310,
+    "currentPrice": 378.9
+  },
+  {
+    "id": "4",
+    "ticker": "NVDA",
+    "name": "NVIDIA Corp.",
+    "quantity": 3,
+    "purchasePrice": 420,
+    "currentPrice": 875.4
+  },
+  {
+    "id": "1776341854411",
+    "ticker": "BNN",
+    "name": "T",
+    "quantity": 5,
+    "purchasePrice": 2,
+    "currentPrice": 2.2950364229150306
+  },
+  {
+    "id": "1776342086145",
+    "ticker": "VH",
+    "name": "Hj",
+    "quantity": 56,
+    "purchasePrice": 56,
+    "currentPrice": 63.81865029074385
+  },
+  {
+    "id": "1776342416279",
+    "ticker": "AAPL",
+    "name": "Apple",
+    "quantity": 12,
+    "purchasePrice": 150.6,
+    "currentPrice": 163.91778763086919
+  },
+  {
+    "id": "1776342449482",
+    "ticker": "NVDA",
+    "name": "Nvdia",
+    "quantity": 52,
+    "purchasePrice": 555.53,
+    "currentPrice": 528.9345018247669
+  },
+  {
+    "id": "1776405967004",
+    "ticker": "GGL",
+    "name": "Google",
+    "quantity": 4,
+    "purchasePrice": 5.5,
+    "currentPrice": 6.044284827572568
+  }
+]
